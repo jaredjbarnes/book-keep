@@ -12,11 +12,23 @@ Important text styling
 Tables
 ==
 
+Collection
+* collection_id
+* title
+* description_id (Document)
+* creator_id
+
+Book
+* book_id
+* title
+* description_id (Document)
+* creator_id
+
 Document
 * document_id
+* version
 * title
 * text
-* version
 * language
 * origin_language
 * creator_id
@@ -26,14 +38,22 @@ Decoration
 * type
 * title
 * document_id
+* document_version
 * is_orphaned
-* has_error
-* error_message
-* version
 * start_index
 * end_index
-* payload (JSON)
 * creator_id
+* payload (JSON)
+
+CollectionToBook
+* collection_id
+* book_id
+* order
+
+BookToDocument
+* book_id
+* document_id
+* order
 
 A decoration becomes an orphan if the size was greater than 0 and is shrunk to 0. 
 
@@ -44,8 +64,8 @@ parallelized by distributing the decorations that need to be upgraded. Steps to 
 decorations. 
 
 1 - Load the new and old version of the document.
-2 - Load the decoration.
-3 - Run the diffChar with the "diff" module to get diffs.
+2 - Load the decorations.
+3 - Run the diffArray with the "diff" module to get diffs.
 4 - Load the old text into the text editor.
 5 - Move cursor through the diffs adding/removing text.
 6 - Save the resulting positions of the decorations.

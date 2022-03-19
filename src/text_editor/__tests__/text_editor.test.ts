@@ -181,31 +181,6 @@ describe("TextEditor", () => {
     expect(cursor.startIndex).toBe(1);
   });
 
-  test("Select range around decoration delete and check if range is gone, then undo.", () => {
-    const editor = new TextEditor();
-    const text = "1234\n1234\n1234\n1234\n1234\n1234";
-    const decoration = { type: "my-decoration", startIndex: 3, endIndex: 6 };
-
-    editor.text = text;
-    editor.addDecoration(decoration);
-    editor.addRange(1, 7);
-    const ranges = editor.getRanges();
-
-    expect(ranges.length).toBe(1);
-    editor.backspace();
-    const cursor = editor.getCursor();
-
-    expect(cursor.startIndex).toBe(1);
-    expect(editor.getRanges().length).toBe(0);
-    expect(editor.getDecorations().length).toBe(1);
-    expect(editor.getDecorations()[0].type).toBe("cursor");
-
-    editor.undo();
-
-    expect(editor.getRanges().length).toBe(0);
-    expect(editor.getDecorations().length).toBe(1);
-  });
-
   test("Unicode", () => {
     const editor = new TextEditor();
     editor.text = "😛😝😜🤪";

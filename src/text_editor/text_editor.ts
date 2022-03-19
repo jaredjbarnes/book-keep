@@ -4,9 +4,6 @@ const clone = (obj: any) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
-const nonAlphaNumericCharacter = /[^a-zA-Z1234567890_]/;
-const alphaNumericCharacter = /[a-zA-Z1234567890_]/;
-
 export type Row = {
   startIndex: number;
   endIndex: number;
@@ -80,7 +77,9 @@ export class TextEditor {
   }
 
   getCharacterAtCursor() {
-    return this.characters.slice(this.cursor.startIndex, this.cursor.endIndex).join("");
+    return this.characters
+      .slice(this.cursor.startIndex, this.cursor.endIndex)
+      .join("");
   }
 
   moveCursorLeft() {
@@ -284,9 +283,7 @@ export class TextEditor {
     left = Math.max(left, 0);
     right = Math.min(right, this.length);
 
-    this.characters = this.characters
-      .slice(0, left)
-      .concat([...text], this.characters.slice(right));
+    this.characters.splice(left, right - left, ...text);
 
     this.decorationManager.collapse(left, right);
 
@@ -385,15 +382,4 @@ export class TextEditor {
   hasRanges() {
     return this.getRanges().length > 0;
   }
-  //#endregion
-
-  // #region History Methods
-  undo() {
-    // Use the command pattern to undo
-  }
-
-  redo() {
-    // Use the command pattern to undo
-  }
-  //#endregion
 }
