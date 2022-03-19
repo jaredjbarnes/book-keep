@@ -209,13 +209,13 @@ export default class DecorationManager {
 
       decoration.startIndex = Math.max(0, decoration.startIndex);
       decoration.startIndex = Math.min(
-        this.editor.text.length,
+        this.editor.length,
         decoration.startIndex
       );
 
       decoration.endIndex = Math.max(0, decoration.endIndex);
       decoration.endIndex = Math.min(
-        this.editor.text.length,
+        this.editor.length,
         decoration.endIndex
       );
     });
