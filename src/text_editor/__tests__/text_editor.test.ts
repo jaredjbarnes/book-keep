@@ -122,7 +122,7 @@ describe("TextEditor", () => {
 
     const editorText = editor.text;
 
-    expect(editorText).toBe("Select this text and this text.");
+    expect(editorText).toBe("Selec this text and this text.");
   });
 
   test("GetCharacterAtCursor.", () => {
@@ -203,7 +203,7 @@ describe("TextEditor", () => {
     editor.undo();
 
     expect(editor.getRanges().length).toBe(0);
-    expect(editor.getDecorations().length).toBe(2);
+    expect(editor.getDecorations().length).toBe(1);
   });
 
   test("Unicode", () => {

@@ -21,12 +21,6 @@ Document
 * origin_language
 * creator_id
 
-Collections
-* collection_id
-* document_id
-* title 
-* creator_id
-
 Decoration
 * decoration_id 
 * type

@@ -30,9 +30,6 @@ export class TextEditor {
   decorations: Decoration[] = [];
 
   private decorationManager: DecorationManager = new DecorationManager(this);
-  private trackingDisabled = false;
-  private history: TextEditorState[] = [];
-  private historyIndex = -1;
 
   get text() {
     return this.characters.join("");
@@ -64,9 +61,6 @@ export class TextEditor {
       },
     ];
     this.decorationManager = new DecorationManager(this);
-    this.trackingDisabled = false;
-    this.history = [];
-    this.historyIndex = -1;
   }
 
   dispose() {
@@ -86,7 +80,7 @@ export class TextEditor {
   }
 
   getCharacterAtCursor() {
-    return this.characters.slice(this.cursor.startIndex, this.cursor.endIndex);
+    return this.characters.slice(this.cursor.startIndex, this.cursor.endIndex).join("");
   }
 
   moveCursorLeft() {
