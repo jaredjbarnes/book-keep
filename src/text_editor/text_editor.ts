@@ -1,8 +1,8 @@
 import DecorationManager, { Decoration } from "./decoration_manager";
 
-const clone = (obj: any) => {
-  return JSON.parse(JSON.stringify(obj));
-};
+function clone<T>(obj: T) {
+  return JSON.parse(JSON.stringify(obj)) as T;
+}
 
 export type Row = {
   startIndex: number;

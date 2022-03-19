@@ -211,4 +211,65 @@ describe("TextEditor", () => {
 
     expect(editor.text).toBe("😛😝🤪");
   });
+
+  test("Orphaned decoration.", () => {
+    const editor = new TextEditor();
+    editor.text = "😛😝😜🤪";
+    editor.addDecoration({
+      type: "test",
+      startIndex: 0,
+      endIndex: 1,
+    });
+    editor.addDecoration({
+      type: "test",
+      startIndex: 1,
+      endIndex: 3,
+    });
+    editor.addDecoration({
+      type: "test",
+      startIndex: 3,
+      endIndex: 4,
+    });
+
+    editor.addRange(1, 3);
+    editor.backspace();
+
+    expect(editor.text).toBe("😛🤪");
+    expect(editor.getDecorationsByType("test").length).toBe(2);
+  });
+
+  test("Sticky Decorations", () => {
+    const editor = new TextEditor();
+    editor.text = "J";
+    editor.addDecoration({
+      type: "sticky",
+      startIndex: 0,
+      endIndex: 1,
+    });
+
+    editor.moveCursor(1);
+    editor.insert("a");
+    editor.insert("r");
+    editor.insert("e");
+    editor.insert("d");
+
+    let decorations = editor.getDecorationsByType("sticky");
+    let decoration = decorations[0];
+
+    expect(editor.text).toBe("Jared");
+    expect(decorations.length).toBe(1);
+    expect(decoration.startIndex).toBe(0);
+    expect(decoration.endIndex).toBe(5);
+
+    editor.backspace();
+    editor.backspace();
+
+    decorations = editor.getDecorationsByType("sticky");
+    decoration = decorations[0];
+
+    expect(editor.text).toBe("Jar");
+    expect(decorations.length).toBe(1);
+    expect(decoration.startIndex).toBe(0);
+    expect(decoration.endIndex).toBe(3);
+  });
 });
