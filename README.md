@@ -8,30 +8,37 @@ Important text styling
 * font-weight
 * letter-spacing
 * line-height
+* margin-top
+* margin-bottom
+* baseline
 
 Tables
 ==
 
 Collection
 * collection_id
+* status (draft and published)
 * title
 * description_id (Document)
 * creator_id
 
 Book
 * book_id
+* status (draft and published)
 * title
 * description_id (Document)
 * creator_id
 
 Document
 * document_id
+* status (draft and published)
 * version
 * title
 * text
 * language
 * origin_language
 * creator_id
+* font_decorations (JSON)
 
 Decoration
 * decoration_id 

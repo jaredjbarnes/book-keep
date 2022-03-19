@@ -212,6 +212,16 @@ describe("TextEditor", () => {
     expect(editor.text).toBe("😛😝🤪");
   });
 
+  test("Unicode Chinese", () => {
+    const editor = new TextEditor();
+    editor.text = "三大天小";
+
+    editor.moveCursorBy(3);
+    editor.backspace();
+
+    expect(editor.text).toBe("三大小");
+  });
+
   test("Orphaned decoration.", () => {
     const editor = new TextEditor();
     editor.text = "😛😝😜🤪";

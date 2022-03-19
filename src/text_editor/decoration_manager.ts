@@ -6,6 +6,7 @@ export type Range = {
 };
 
 export type Decoration = Range & {
+  id?: string;
   type: string;
 };
 
