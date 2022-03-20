@@ -16,50 +16,50 @@ Tables
 ==
 
 Collection
-* collection_id
+* collection_id (number)
 * status (draft and published)
 * title
 * description_id (Document)
 * creator_id
 
 Book
-* book_id
+* book_id (number)
 * status (draft and published)
 * title
 * description_id (Document)
 * creator_id
 
 Document
-* document_id
+* document_id (number)
 * status (draft and published)
-* version
+* version (number)
 * title
 * text
 * language
 * origin_language
 * creator_id
-* font_decorations (JSON)
+* formatting_decorations (JSON)
 
 Decoration
-* decoration_id 
+* decoration_id (number)
 * type
 * title
-* document_id
-* document_version
+* document_id (number)
+* document_version (number)
 * is_orphaned
 * start_index
 * end_index
-* creator_id
+* creator_id (number)
 * payload (JSON)
 
 CollectionToBook
-* collection_id
-* book_id
+* collection_id (number)
+* book_id (number)
 * order
 
 BookToDocument
-* book_id
-* document_id
+* book_id (number)
+* document_id (number)
 * order
 
 A decoration becomes an orphan if the size was greater than 0 and is shrunk to 0. 
@@ -88,4 +88,11 @@ There should be semantic decorations to indicate headings paragraphs etc.
 There could be chapter decorations.
 
 Really there is an infinite way to use decorations.
+
+All formatting should be saved with the document. These are the only decorations that are
+saved during all workflows. 
+
+The non-formatting decorations are only upgraded when the document is published status.
+
+
 

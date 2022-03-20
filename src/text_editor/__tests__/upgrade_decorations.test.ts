@@ -42,7 +42,7 @@ describe("Upgrade Decorations", () => {
       },
     ];
 
-    const results = upgradeDecorations("-o_", "-_", decorations);
+    const results = upgradeDecorations("-o_", "-n_", decorations);
     const middle = results.filter(d=>d.type === "middle");
     const span = results.filter(d=>d.type === "span")[0];
     const left = results.filter(d=>d.type === "left")[0];
@@ -52,19 +52,19 @@ describe("Upgrade Decorations", () => {
 
     expect(middle.length).toBe(0);
     expect(span.startIndex).toBe(0);
-    expect(span.endIndex).toBe(2);
+    expect(span.endIndex).toBe(3);
 
     expect(left.startIndex).toBe(0);
     expect(left.endIndex).toBe(1);
 
     expect(overlapLeft.startIndex).toBe(0);
-    expect(overlapLeft.endIndex).toBe(1);
+    expect(overlapLeft.endIndex).toBe(2);
 
     expect(overlapRight.startIndex).toBe(1);
-    expect(overlapRight.endIndex).toBe(2);
+    expect(overlapRight.endIndex).toBe(3);
 
-    expect(right.startIndex).toBe(1);
-    expect(right.endIndex).toBe(2);
+    expect(right.startIndex).toBe(2);
+    expect(right.endIndex).toBe(3);
 
     expect(results.length).toBe(5);
   });
