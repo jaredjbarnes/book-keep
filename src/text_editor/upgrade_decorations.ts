@@ -18,8 +18,8 @@ export function upgradeDecorations(
       editor.insert(d.value.join(""));
     } else if (d.removed) {
       editor.addRange(
-        editor.cursor.startIndex,
-        editor.cursor.startIndex + (d.count || 0)
+        editor.cursorPosition,
+        editor.cursorPosition + (d.count || 0)
       );
       editor.backspace();
     } else {

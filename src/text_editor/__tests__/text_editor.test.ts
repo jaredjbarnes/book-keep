@@ -53,22 +53,22 @@ describe("TextEditor", () => {
     editor.text = text;
 
     editor.moveCursor(7);
-    expect(editor.cursor.startIndex).toBe(7);
+    expect(editor.cursorPosition).toBe(7);
 
     editor.moveCursor(8);
-    expect(editor.cursor.startIndex).toBe(8);
+    expect(editor.cursorPosition).toBe(8);
 
     editor.moveCursor(9);
-    expect(editor.cursor.startIndex).toBe(8);
+    expect(editor.cursorPosition).toBe(8);
 
     editor.moveCursor(0);
-    expect(editor.cursor.startIndex).toBe(0);
+    expect(editor.cursorPosition).toBe(0);
 
     editor.moveCursor(-1);
-    expect(editor.cursor.startIndex).toBe(0);
+    expect(editor.cursorPosition).toBe(0);
 
     editor.moveCursor(5);
-    expect(editor.cursor.startIndex).toBe(5);
+    expect(editor.cursorPosition).toBe(5);
   });
 
   test("Insert text.", () => {
@@ -161,9 +161,8 @@ describe("TextEditor", () => {
 
     expect(ranges.length).toBe(1);
     editor.backspace();
-    const cursor = editor.getCursor();
 
-    expect(cursor.startIndex).toBe(1);
+    expect(editor.cursorPosition).toBe(1);
   });
 
   test("Select range left to right and delete.", () => {
@@ -176,9 +175,8 @@ describe("TextEditor", () => {
 
     expect(ranges.length).toBe(1);
     editor.backspace();
-    const cursor = editor.getCursor();
 
-    expect(cursor.startIndex).toBe(1);
+    expect(editor.cursorPosition).toBe(1);
   });
 
   test("Unicode", () => {

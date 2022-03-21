@@ -26,6 +26,7 @@ export class TextEditor {
   private _characters: string[] = [];
   private _decorations: Decoration[] = [];
   private decorationManager: DecorationManager = new DecorationManager(this);
+  cursorPosition = 0;
 
   get text() {
     return this._characters.join("");
@@ -33,8 +34,7 @@ export class TextEditor {
 
   set text(text: string) {
     this._characters = [...text];
-    this.cursor.startIndex = 0;
-    this.cursor.endIndex = 1;
+    this.cursorPosition = 0;
 
     this.setDecorations([]);
   }
@@ -44,7 +44,7 @@ export class TextEditor {
   }
 
   get decorations(): ReadonlyArray<Decoration> {
-    return this._decorations;
+    return this._decorations.slice(0);
   }
 
   get characters(): ReadonlyArray<string> {
@@ -55,55 +55,36 @@ export class TextEditor {
     this.initialize();
   }
 
-  // #region Life Cycle Methods
   initialize() {
-    this._decorations = [
-      {
-        type: "cursor",
-        startIndex: 0,
-        endIndex: 1,
-      },
-    ];
+    this._decorations = [];
     this.decorationManager = new DecorationManager(this);
   }
 
   dispose() {
     this.initialize();
   }
-  //#endregion
-
-  // #endregion
 
   // #region Cursor Methods
-  get cursor() {
-    return this._decorations.filter((d) => d.type === "cursor")[0];
-  }
-
-  getCursor() {
-    return { ...this.cursor };
-  }
 
   getCharacterAtCursor() {
     return this._characters
-      .slice(this.cursor.startIndex, this.cursor.endIndex)
+      .slice(this.cursorPosition, this.cursorPosition + 1)
       .join("");
   }
 
   moveCursorLeft() {
-    this.moveCursor(this.cursor.startIndex - 1);
+    this.moveCursor(this.cursorPosition - 1);
   }
 
   moveCursorRight() {
-    this.moveCursor(this.cursor.startIndex + 1);
+    this.moveCursor(this.cursorPosition + 1);
   }
 
   moveCursorBy(index: number) {
-    this.moveCursor(this.cursor.startIndex + index);
+    this.moveCursor(this.cursorPosition + index);
   }
 
   moveCursor(index: number) {
-    const lastIndex = this.cursor.startIndex;
-
     if (typeof index !== "number" || isNaN(index)) {
       return;
     }
@@ -116,21 +97,12 @@ export class TextEditor {
       index = 0;
     }
 
-    this.cursor.startIndex = index;
-    this.cursor.endIndex = index + 1;
-
+    this.cursorPosition = index;
     this.decorationManager.saveDecorationPlacementHistory();
   }
 
-  getCursorPosition() {
-    return this.cursor.startIndex;
-  }
-
   moveToDecoration(decoration: Decoration) {
-    if (
-      this._decorations.includes(decoration) &&
-      decoration.type !== "cursor"
-    ) {
+    if (this._decorations.includes(decoration)) {
       // This Makes the text sticky by having the cursor history from inside.
       const left = Math.min(decoration.startIndex, decoration.endIndex);
       this.moveCursor(left);
@@ -141,10 +113,6 @@ export class TextEditor {
 
   // #region Decorations Methods
   addDecoration(decoration: Decoration) {
-    if (decoration.type === "cursor") {
-      return;
-    }
-
     decoration.startIndex = Math.max(0, decoration.startIndex);
     decoration.startIndex = Math.min(
       decoration.startIndex,
@@ -160,10 +128,6 @@ export class TextEditor {
   }
 
   replaceDecoration(decoration: Decoration, newDecoration: Decoration) {
-    if (decoration.type === "cursor" || newDecoration.type === "cursor") {
-      return;
-    }
-
     const index = this.findDecorationIndex(decoration);
 
     if (index >= 0) {
@@ -192,10 +156,6 @@ export class TextEditor {
   }
 
   removeDecoration(decoration: Decoration) {
-    if (decoration.type === "cursor") {
-      return;
-    }
-
     const index = this.findDecorationIndex(decoration);
 
     if (index >= 0) {
@@ -204,8 +164,6 @@ export class TextEditor {
   }
 
   setDecorations(decorations: Decoration[]) {
-    this._decorations = this._decorations.filter((d) => d.type === "cursor");
-
     decorations.forEach((decoration) => {
       this.addDecoration(decoration);
     });
@@ -217,26 +175,20 @@ export class TextEditor {
     );
   }
 
-  getDecorations() {
-    return clone(this._decorations);
-  }
-
   getDecorationsByType(type: string) {
-    return clone(this._decorations.filter((d) => d.type === type));
+    return this._decorations.filter((d) => d.type === type);
   }
 
   getDecorationsByRange(startIndex: number, endIndex: number) {
     startIndex = Math.min(startIndex, endIndex);
     endIndex = Math.max(startIndex, endIndex);
 
-    return clone(
-      this._decorations.filter((d) => {
-        const left = Math.min(d.startIndex, d.endIndex);
-        const right = Math.max(d.startIndex, d.endIndex);
+    return this._decorations.filter((d) => {
+      const left = Math.min(d.startIndex, d.endIndex);
+      const right = Math.max(d.startIndex, d.endIndex);
 
-        return Math.max(startIndex, left) < Math.min(endIndex, right);
-      })
-    );
+      return Math.max(startIndex, left) < Math.min(endIndex, right);
+    });
   }
 
   getSegmentsByRange(
@@ -312,7 +264,7 @@ export class TextEditor {
 
   insert(text: string) {
     const selections = this.getRanges();
-    const cursorPosition = this.cursor.startIndex;
+    const cursorPosition = this.cursorPosition;
 
     if (selections.length > 0) {
       selections.forEach((selection) => {
@@ -332,7 +284,7 @@ export class TextEditor {
 
   backspace() {
     const selections = this.getRanges();
-    const cursorPosition = this.cursor.startIndex;
+    const cursorPosition = this.cursorPosition;
 
     if (selections.length > 0) {
       selections.forEach((selection) => {
@@ -348,7 +300,7 @@ export class TextEditor {
 
   delete() {
     const selections = this.getRanges();
-    const cursorPosition = this.cursor.startIndex;
+    const cursorPosition = this.cursorPosition;
 
     if (selections.length > 0) {
       selections.forEach((selection) => {

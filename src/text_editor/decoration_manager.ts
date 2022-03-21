@@ -151,8 +151,8 @@ export default class DecorationManager {
     }
 
     if (
-      this.editor.cursor.startIndex > left &&
-      this.editor.cursor.startIndex < right
+      this.editor.cursorPosition > left &&
+      this.editor.cursorPosition < right
     ) {
       return true;
     }
@@ -180,9 +180,7 @@ export default class DecorationManager {
     this.range.endIndex = Math.max(startIndex, endIndex);
 
     const amount = this.range.startIndex - this.range.endIndex;
-    const decorations = this.editor.decorations.filter(
-      (d) => d.type !== "cursor"
-    );
+    const decorations = this.editor.decorations;
 
     decorations.forEach((decoration) => {
       if (this.isDecorationLeftOfTheRange(decoration)) {
@@ -215,10 +213,7 @@ export default class DecorationManager {
       );
 
       decoration.endIndex = Math.max(0, decoration.endIndex);
-      decoration.endIndex = Math.min(
-        this.editor.length,
-        decoration.endIndex
-      );
+      decoration.endIndex = Math.min(this.editor.length, decoration.endIndex);
     });
   }
 
@@ -267,8 +262,8 @@ export default class DecorationManager {
   }
 
   saveDecorationPlacementHistory() {
-    this.range.startIndex = this.editor.cursor.startIndex;
-    this.range.endIndex = this.editor.cursor.startIndex;
+    this.range.startIndex = this.editor.cursorPosition;
+    this.range.endIndex = this.editor.cursorPosition;
     const decorations = this.editor.decorations.filter(
       (d) => d.type !== "cursor"
     );

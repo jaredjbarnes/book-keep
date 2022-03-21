@@ -94,5 +94,25 @@ saved during all workflows.
 
 The non-formatting decorations are only upgraded when the document is published status.
 
+Rendering Engine
+===
+Needs to create meta data for lines. Start Character Index, End Character Index, height.
+
+Line
+* startCharacterIndex
+* endCharacterIndex
+* height
+
+The layout engine needs to iterate over the decorations and the characters to discover 
+line breaks. Three main causes of line breaks, 
+* \n
+* Decoration
+* Characters exceeded document width
+
+
+Decorations need to be sorted by startIndex so that we can find relevant decorations 
+quickly. We can use binary search to both find and splice the location of decorations.
+
+Remove cursor out of the decorations.
 
 
