@@ -4,24 +4,6 @@ function clone<T>(obj: T) {
   return JSON.parse(JSON.stringify(obj)) as T;
 }
 
-export type Row = {
-  startIndex: number;
-  endIndex: number;
-  value: string;
-};
-
-export type TextEditorState = {
-  type: string;
-  editor: Document;
-  text: string;
-  decorations: Decoration[];
-};
-
-export interface IsLoadingEvent {
-  type: string;
-  isLoading: boolean;
-}
-
 export class Document {
   private _characters: string[] = [];
   private _decorations: Decoration[] = [];
