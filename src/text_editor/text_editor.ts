@@ -274,8 +274,6 @@ export class TextEditor {
         this.replaceText(left, right, text);
         this.moveCursor(left + text.length);
       });
-
-      this.removeAllRanges();
     } else {
       this.replaceText(cursorPosition, cursorPosition, text);
       this.moveCursor(cursorPosition + text.length);
