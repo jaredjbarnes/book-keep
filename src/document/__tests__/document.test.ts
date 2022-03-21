@@ -1,7 +1,7 @@
-import { TextEditor } from "./../text_editor";
-describe("TextEditor", () => {
+import { Document } from "./../document";
+describe("Document", () => {
   test("Set and get text.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "My text.";
 
     editor.text = text;
@@ -11,7 +11,7 @@ describe("TextEditor", () => {
   });
 
   test("Replace text.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "My text.";
 
     editor.text = text;
@@ -23,7 +23,7 @@ describe("TextEditor", () => {
   });
 
   test("Replace simple example.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "Cat";
 
     editor.text = text;
@@ -35,7 +35,7 @@ describe("TextEditor", () => {
   });
 
   test("Remove text.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "My text.";
 
     editor.text = text;
@@ -47,7 +47,7 @@ describe("TextEditor", () => {
   });
 
   test("Move cursor.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "My text.";
 
     editor.text = text;
@@ -72,7 +72,7 @@ describe("TextEditor", () => {
   });
 
   test("Insert text.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "My text.";
 
     editor.text = text;
@@ -99,7 +99,7 @@ describe("TextEditor", () => {
   });
 
   test("Insert text with selection.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "Select this text and this text.";
 
     editor.text = text;
@@ -113,7 +113,7 @@ describe("TextEditor", () => {
   });
 
   test("Backspace.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "Select this text and this text.";
 
     editor.text = text;
@@ -126,7 +126,7 @@ describe("TextEditor", () => {
   });
 
   test("GetCharacterAtCursor.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "1234\n1234\n1234\n1234\n1234\n1234";
     editor.text = text;
 
@@ -138,7 +138,7 @@ describe("TextEditor", () => {
   });
 
   test("Add, and remove decoration.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "1234\n1234\n1234\n1234\n1234\n1234";
     const decoration = { type: "test", startIndex: 0, endIndex: 5 };
 
@@ -152,7 +152,7 @@ describe("TextEditor", () => {
   });
 
   test("Select range right to left and delete.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "1234\n1234\n1234\n1234\n1234\n1234";
 
     editor.text = text;
@@ -166,7 +166,7 @@ describe("TextEditor", () => {
   });
 
   test("Select range left to right and delete.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "1234\n1234\n1234\n1234\n1234\n1234";
 
     editor.text = text;
@@ -180,7 +180,7 @@ describe("TextEditor", () => {
   });
 
   test("Unicode", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "😛😝😜🤪";
 
     expect(editor.length).toBe(4);
@@ -191,7 +191,7 @@ describe("TextEditor", () => {
   });
 
   test("Unicode Delete", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "😛😝😜🤪";
 
     editor.moveCursorBy(3);
@@ -201,7 +201,7 @@ describe("TextEditor", () => {
   });
 
   test("Unicode Backspace", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "😛😝😜🤪";
 
     editor.moveCursorBy(3);
@@ -211,7 +211,7 @@ describe("TextEditor", () => {
   });
 
   test("Unicode Chinese", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "三大天小";
 
     editor.moveCursorBy(3);
@@ -221,7 +221,7 @@ describe("TextEditor", () => {
   });
 
   test("Orphaned decoration.", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "😛😝😜🤪";
     editor.addDecoration({
       type: "test",
@@ -247,7 +247,7 @@ describe("TextEditor", () => {
   });
 
   test("Sticky Decorations", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     editor.text = "J";
     editor.addDecoration({
       type: "sticky",

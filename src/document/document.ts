@@ -12,7 +12,7 @@ export type Row = {
 
 export type TextEditorState = {
   type: string;
-  editor: TextEditor;
+  editor: Document;
   text: string;
   decorations: Decoration[];
 };
@@ -22,7 +22,7 @@ export interface IsLoadingEvent {
   isLoading: boolean;
 }
 
-export class TextEditor {
+export class Document {
   private _characters: string[] = [];
   private _decorations: Decoration[] = [];
   private decorationManager: DecorationManager = new DecorationManager(this);

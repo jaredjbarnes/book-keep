@@ -1,10 +1,10 @@
 import { diffChars, diffArrays } from "diff";
-import { TextEditor } from "../text_editor";
+import { Document } from "../document";
 
 describe("Diff", () => {
 
   test("Simple", () => {
-    const editor = new TextEditor();
+    const editor = new Document();
     const text = "😛😝😜🤪";
     editor.text = text;
     editor.moveCursor(4);

@@ -1,3 +1,3 @@
-import { TextEditor } from "./text_editor/text_editor";
+import { Document } from "./document/document";
 
-export { TextEditor };
+export { Document };

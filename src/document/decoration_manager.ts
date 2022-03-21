@@ -1,4 +1,4 @@
-import { TextEditor } from "./text_editor";
+import { Document } from "./document";
 
 export type Range = {
   startIndex: number;
@@ -12,11 +12,11 @@ export type Decoration = Range & {
 
 export default class DecorationManager {
   private range: Range;
-  private editor: TextEditor;
+  private document: Document;
   private decorationPositions: WeakMap<Decoration, string[]>;
 
-  constructor(editor: TextEditor) {
-    this.editor = editor;
+  constructor(editor: Document) {
+    this.document = editor;
     this.range = {
       startIndex: 0,
       endIndex: 0,
@@ -151,8 +151,8 @@ export default class DecorationManager {
     }
 
     if (
-      this.editor.cursorPosition > left &&
-      this.editor.cursorPosition < right
+      this.document.cursorPosition > left &&
+      this.document.cursorPosition < right
     ) {
       return true;
     }
@@ -180,7 +180,7 @@ export default class DecorationManager {
     this.range.endIndex = Math.max(startIndex, endIndex);
 
     const amount = this.range.startIndex - this.range.endIndex;
-    const decorations = this.editor.decorations;
+    const decorations = this.document.decorations;
 
     decorations.forEach((decoration) => {
       if (this.isDecorationLeftOfTheRange(decoration)) {
@@ -188,7 +188,7 @@ export default class DecorationManager {
       } else if (this.isDecorationRightOfTheRange(decoration)) {
         this.adjustBothSides(decoration, amount, amount);
       } else if (this.isDecorationWithinTheRange(decoration)) {
-        this.editor.removeDecoration(decoration);
+        this.document.removeDecoration(decoration);
       } else if (this.doesDecorationSurroundTheRange(decoration)) {
         this.adjustRightSide(decoration, amount);
       } else if (this.doesRangeOverlapLeftSideOfDecoration(decoration)) {
@@ -208,19 +208,19 @@ export default class DecorationManager {
 
       decoration.startIndex = Math.max(0, decoration.startIndex);
       decoration.startIndex = Math.min(
-        this.editor.length,
+        this.document.length,
         decoration.startIndex
       );
 
       decoration.endIndex = Math.max(0, decoration.endIndex);
-      decoration.endIndex = Math.min(this.editor.length, decoration.endIndex);
+      decoration.endIndex = Math.min(this.document.length, decoration.endIndex);
     });
   }
 
   expand(onIndex: number, amount: number) {
     this.range.startIndex = onIndex;
     this.range.endIndex = onIndex;
-    const decorations = this.editor.decorations.filter(
+    const decorations = this.document.decorations.filter(
       (d) => d.type !== "cursor"
     );
 
@@ -262,9 +262,9 @@ export default class DecorationManager {
   }
 
   saveDecorationPlacementHistory() {
-    this.range.startIndex = this.editor.cursorPosition;
-    this.range.endIndex = this.editor.cursorPosition;
-    const decorations = this.editor.decorations.filter(
+    this.range.startIndex = this.document.cursorPosition;
+    this.range.endIndex = this.document.cursorPosition;
+    const decorations = this.document.decorations.filter(
       (d) => d.type !== "cursor"
     );
 

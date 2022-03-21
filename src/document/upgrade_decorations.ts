@@ -1,13 +1,13 @@
 import { diffArrays } from "diff";
 import { Decoration } from "./decoration_manager";
-import { TextEditor } from "./text_editor";
+import { Document } from "./document";
 
 export function upgradeDecorations(
   oldText: string,
   newText: string,
   decorations: Decoration[]
 ) {
-  const editor = new TextEditor();
+  const editor = new Document();
   editor.text = oldText;
 
   decorations.forEach((d) => editor.addDecoration(d));
