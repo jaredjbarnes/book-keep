@@ -99,20 +99,52 @@ Rendering Engine
 Needs to create meta data for lines. Start Character Index, End Character Index, height.
 
 Line
+* offset
 * startCharacterIndex
 * endCharacterIndex
 * height
+
+Figures
+===
+Figures are assigned to an exact character index within the RenderEngine. There will be 
+endless types of figures. The figures are decorations with type "figure". Figure 
+implementations should be dynamically loaded as a javascript module. If it can't find 
+the module it will display an error figure, not yet implemented figure. The figure 
+decoration decides if the figure is block or wrap around it will also decide if it is 
+left, center or right aligned. The module will adhere to an
+interface which will tell the renderer what the dimensions are of the figure.
+
+Recalculating a line can cause a reflow to the end of the viewport. 
+
+When the the last lines last character doesn't match the character length of the 
+document we know we need to render more lines.
+
+A figure will always cause a new line. 
+
+LineDetails will help when the user selects content within the document.
+LineDetails
+* characterPositions (number[])
 
 The layout engine needs to iterate over the decorations and the characters to discover 
 line breaks. Three main causes of line breaks, 
 * \n
 * Decoration
-* Characters exceeded document width
+* Characters exceeded rendered document width
 
+Layout Engine should do one line at a time, and let go of the thread, it should go until 
+it has rendered to the bottom of the viewport.
 
 Decorations need to be sorted by startIndex so that we can find relevant decorations 
 quickly. We can use binary search to both find and splice the location of decorations.
 
 Remove cursor out of the decorations.
 
+The decorations need to live inside of the decoration manager. We should delegate the 
+decoration management to that, we should add the binary search there and other optimizations.
+
+DecorationManager 
+* decorations
+* addDecoration
+* adjustPositionDecoration
+* removeDecoration
 

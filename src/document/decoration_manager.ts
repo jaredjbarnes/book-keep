@@ -11,17 +11,17 @@ export type Decoration = Range & {
 };
 
 export default class DecorationManager {
-  private range: Range;
-  private document: Document;
-  private decorationPositions: WeakMap<Decoration, string[]>;
+  private _range: Range;
+  private _document: Document;
+  private _decorationPositions: WeakMap<Decoration, string[]>;
 
-  constructor(editor: Document) {
-    this.document = editor;
-    this.range = {
+  constructor(document: Document) {
+    this._document = document;
+    this._range = {
       startIndex: 0,
       endIndex: 0,
     };
-    this.decorationPositions = new WeakMap();
+    this._decorationPositions = new WeakMap();
   }
 
   adjustBothSides(
@@ -87,57 +87,57 @@ export default class DecorationManager {
   isRangeOnLeftSideOfDecoration(decoration: Decoration) {
     const left = Math.min(decoration.startIndex, decoration.endIndex);
     return (
-      this.range.startIndex === this.range.endIndex &&
-      this.range.startIndex === left
+      this._range.startIndex === this._range.endIndex &&
+      this._range.startIndex === left
     );
   }
 
   isRangeOnRightSideOfDecoration(decoration: Decoration) {
     const right = Math.max(decoration.startIndex, decoration.endIndex);
     return (
-      this.range.startIndex === this.range.endIndex &&
-      this.range.startIndex === right
+      this._range.startIndex === this._range.endIndex &&
+      this._range.startIndex === right
     );
   }
 
   isDecorationLeftOfTheRange(decoration: Decoration) {
     const right = Math.max(decoration.startIndex, decoration.endIndex);
-    return right <= this.range.startIndex;
+    return right <= this._range.startIndex;
   }
 
   isDecorationRightOfTheRange(decoration: Decoration) {
     const left = Math.min(decoration.startIndex, decoration.endIndex);
-    return left >= this.range.endIndex;
+    return left >= this._range.endIndex;
   }
 
   isDecorationWithinTheRange(decoration: Decoration) {
     const left = Math.min(decoration.startIndex, decoration.endIndex);
     const right = Math.max(decoration.startIndex, decoration.endIndex);
 
-    return this.range.startIndex <= left && this.range.endIndex >= right;
+    return this._range.startIndex <= left && this._range.endIndex >= right;
   }
 
   doesDecorationSurroundTheRange(decoration: Decoration) {
     const left = Math.min(decoration.startIndex, decoration.endIndex);
     const right = Math.max(decoration.startIndex, decoration.endIndex);
 
-    return this.range.startIndex >= left && this.range.endIndex <= right;
+    return this._range.startIndex >= left && this._range.endIndex <= right;
   }
 
   doesRangeOverlapLeftSideOfDecoration(decoration: Decoration) {
     const left = Math.min(decoration.startIndex, decoration.endIndex);
 
-    return this.range.startIndex < left && this.range.endIndex > left;
+    return this._range.startIndex < left && this._range.endIndex > left;
   }
 
   doesRangeOverlapRightSideOfDecoration(decoration: Decoration) {
     const right = Math.max(decoration.startIndex, decoration.endIndex);
 
-    return this.range.startIndex < right && this.range.endIndex > right;
+    return this._range.startIndex < right && this._range.endIndex > right;
   }
 
   isSticky(decoration: Decoration) {
-    const positions = this.decorationPositions.get(decoration);
+    const positions = this._decorationPositions.get(decoration);
     const left = Math.min(decoration.startIndex, decoration.endIndex);
     const right = Math.max(decoration.startIndex, decoration.endIndex);
 
@@ -151,8 +151,8 @@ export default class DecorationManager {
     }
 
     if (
-      this.document.cursorPosition > left &&
-      this.document.cursorPosition < right
+      this._document.cursorPosition > left &&
+      this._document.cursorPosition < right
     ) {
       return true;
     }
@@ -161,11 +161,11 @@ export default class DecorationManager {
   }
 
   saveDecorationPosition(decoration: Decoration, position: string) {
-    let positions = this.decorationPositions.get(decoration);
+    let positions = this._decorationPositions.get(decoration);
 
     if (positions == null) {
       positions = [];
-      this.decorationPositions.set(decoration, positions);
+      this._decorationPositions.set(decoration, positions);
     }
 
     positions.push(position);
@@ -176,11 +176,11 @@ export default class DecorationManager {
   }
 
   collapse(startIndex: number, endIndex: number) {
-    this.range.startIndex = Math.min(startIndex, endIndex);
-    this.range.endIndex = Math.max(startIndex, endIndex);
+    this._range.startIndex = Math.min(startIndex, endIndex);
+    this._range.endIndex = Math.max(startIndex, endIndex);
 
-    const amount = this.range.startIndex - this.range.endIndex;
-    const decorations = this.document.decorations;
+    const amount = this._range.startIndex - this._range.endIndex;
+    const decorations = this._document.decorations;
 
     decorations.forEach((decoration) => {
       if (this.isDecorationLeftOfTheRange(decoration)) {
@@ -188,7 +188,7 @@ export default class DecorationManager {
       } else if (this.isDecorationRightOfTheRange(decoration)) {
         this.adjustBothSides(decoration, amount, amount);
       } else if (this.isDecorationWithinTheRange(decoration)) {
-        this.document.removeDecoration(decoration);
+        this._document.removeDecoration(decoration);
       } else if (this.doesDecorationSurroundTheRange(decoration)) {
         this.adjustRightSide(decoration, amount);
       } else if (this.doesRangeOverlapLeftSideOfDecoration(decoration)) {
@@ -208,21 +208,22 @@ export default class DecorationManager {
 
       decoration.startIndex = Math.max(0, decoration.startIndex);
       decoration.startIndex = Math.min(
-        this.document.length,
+        this._document.length,
         decoration.startIndex
       );
 
       decoration.endIndex = Math.max(0, decoration.endIndex);
-      decoration.endIndex = Math.min(this.document.length, decoration.endIndex);
+      decoration.endIndex = Math.min(
+        this._document.length,
+        decoration.endIndex
+      );
     });
   }
 
   expand(onIndex: number, amount: number) {
-    this.range.startIndex = onIndex;
-    this.range.endIndex = onIndex;
-    const decorations = this.document.decorations.filter(
-      (d) => d.type !== "cursor"
-    );
+    this._range.startIndex = onIndex;
+    this._range.endIndex = onIndex;
+    const decorations = this._document.decorations.filter((d) => d.type !== "cursor");
 
     decorations.forEach((decoration) => {
       if (this.isSticky(decoration)) {
@@ -262,9 +263,9 @@ export default class DecorationManager {
   }
 
   saveDecorationPlacementHistory() {
-    this.range.startIndex = this.document.cursorPosition;
-    this.range.endIndex = this.document.cursorPosition;
-    const decorations = this.document.decorations.filter(
+    this._range.startIndex = this._document.cursorPosition;
+    this._range.endIndex = this._document.cursorPosition;
+    const decorations = this._document.decorations.filter(
       (d) => d.type !== "cursor"
     );
 

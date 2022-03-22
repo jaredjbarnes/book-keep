@@ -1,5 +1,5 @@
-import { Decoration } from "../decoration_manager";
-import { upgradeDecorations } from "../upgrade_decorations";
+import { Decoration } from "./../decoration_manager";
+import { upgradeDecorations } from "./../upgrade_decorations";
 
 describe("Upgrade Decorations", () => {
   test("Span, overlap left, overlap right, left, right, middle.", () => {
